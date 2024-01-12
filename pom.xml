@@ -5,29 +5,34 @@
         xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
 
-    <!--gav信息-->
-    <groupId>com.gpicsc.extend-modules</groupId>
-    <artifactId>common</artifactId>
-    <version>1.0.0</version>
+    <groupId>io.github.gaozui</groupId>
+    <artifactId>base-common</artifactId>
+    <version>1.0.0-RELEASE</version>
 
     <!--项目信息-->
     <name>common</name>
     <description>common 通用模块</description>
-    <url>http://9.144.1.168:580/base/base_system_module</url>
 
-    <!--开源协议-->
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <spring-boot.version>2.3.4.RELEASE</spring-boot.version>
+        <projectUrl>https://github.com/gaozui/base-common.git</projectUrl>
+        <serverId>oss</serverId>
+    </properties>
+
+<!--    <parent>-->
+<!--        <groupId>org.sonatype.oss</groupId>-->
+<!--        <artifactId>oss-parent</artifactId>-->
+<!--        <version>7</version>-->
+<!--    </parent>-->
 
     <!--开发者信息-->
     <developers>
         <developer>
             <name>杨家进</name>
-            <email>102805283@qq.com</email>
+            <email>gaozui@outlook.com</email>
             <roles>
                 <role>Project Manager</role>
                 <role>Architect</role>
@@ -43,12 +48,6 @@
             <timezone>+8</timezone>
         </developer>
     </developers>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-    </properties>
 
     <dependencies>
 
@@ -152,13 +151,106 @@
 
     </dependencies>
 
-    <!-- 指定仓库地址 -->
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>actable</distribution>
+        </license>
+    </licenses>
+
+    <url>${projectUrl}</url>
+
+    <scm>
+        <tag>master</tag>
+        <url>git@github.com:gaozui/base-common.git</url>
+        <connection>git@github.com:gaozui/base-common.git</connection>
+        <developerConnection>git@github.com:gaozui/base-common.git</developerConnection>
+    </scm>
+
     <distributionManagement>
+        <snapshotRepository>
+            <id>oss</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+
         <repository>
-            <id>gpicsc_release</id>
-            <url>http://9.144.1.168:8081/repository/gpicsc-release/</url>
+            <id>oss</id>
+            <name>Nexus Release Repository</name>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <additionalOptions>
+                                <additionalOption>-Xdoclint:none</additionalOption>
+                            </additionalOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Built-By>dothetrick</Built-By>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>oss</serverId>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
